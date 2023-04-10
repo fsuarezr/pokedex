@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:14
+    platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=fslashh
+      - POSTGRES_PASSWORD=HalaMadrid14
+    networks:
+      - net-services
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: fslashh
+      MONGO_INITDB_ROOT_PASSWORD: HalaMadrid14
+    restart: unless-stopped
+    volumes:
+      - ./data/mongo:/data/db
+    networks:
+      - net-services
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+        compress: "true"
+
+# Docker Networks
+networks:
+  net-services:
+    driver: bridge
