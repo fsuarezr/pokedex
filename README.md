@@ -16,6 +16,10 @@ npm i -g @nest/cli
 ```
 docker-compose -f docker-compose.yml up -d --build --force-recreate
 ```
+5. Ejecutar la migración de Pokemones a la BD
+```
+http://localhost:3000/api/v2/seed
+```
 
 ## Stack usado:
 * MongoDB

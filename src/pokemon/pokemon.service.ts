@@ -95,6 +95,22 @@ export class PokemonService {
     return deletedCount
   }
 
+  async clearPokemonCollection() {
+    try {
+      await this.pokemonModel.deleteMany({})
+    } catch (error) {
+      this.handleMongoExceptions(error)
+    }
+  }
+
+  async massiveInsertions(pokemons: Pokemon[]) {
+    try {
+      await this.pokemonModel.insertMany(pokemons)
+    } catch (error) {
+      this.handleMongoExceptions(error)
+    }
+  }
+
   private handleMongoExceptions(error) {
     if (error.code === 11000) {
       throw new BadRequestException(
