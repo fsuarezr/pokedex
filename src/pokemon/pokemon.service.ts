@@ -25,15 +25,7 @@ export class PokemonService {
 
       return pokemon
     } catch (error) {
-      if (error.code === 11000) {
-        throw new BadRequestException(
-          `Pokemon exists in db ${JSON.stringify(error.keyValue)}`,
-        )
-      }
-      console.log(error)
-      throw new InternalServerErrorException(
-        `Can't create Pokemon - Check server logs`,
-      )
+      this.handleMongoExceptions(error)
     }
   }
 
@@ -66,11 +58,52 @@ export class PokemonService {
     return pokemon
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`
+  async update(term: string, updatePokemonDto: UpdatePokemonDto) {
+    const pokemon = await this.findOne(term)
+
+    const { name } = updatePokemonDto
+
+    if (name) updatePokemonDto.name = updatePokemonDto.name.toLowerCase()
+
+    try {
+      const pokemonUpdated = await this.pokemonModel.findByIdAndUpdate(
+        pokemon._id,
+        updatePokemonDto,
+        { new: true },
+      )
+
+      return pokemonUpdated
+    } catch (error) {
+      this.handleMongoExceptions(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pokemon`
+  async remove(id: string) {
+    // Primera forma de eliminar elemento de Mongo 2 llamadas a BD
+    // const pokemon = await this.findOne(id)
+    // await pokemon.deleteOne()
+
+    // Segunda forma de eliminar elemento de Mongo 1 llamadas a BD
+    // await this.pokemonModel.findByIdAndDelete(id)
+
+    // Tercera forma de eliminar elemento de Mongo 1 llamadas a BD
+    const { deletedCount } = await this.pokemonModel.deleteOne({ _id: id })
+
+    if (deletedCount === 0)
+      throw new BadRequestException(`Pokemon with id: ${id} not found`)
+
+    return deletedCount
+  }
+
+  private handleMongoExceptions(error) {
+    if (error.code === 11000) {
+      throw new BadRequestException(
+        `Pokemon exists in db ${JSON.stringify(error.keyValue)}`,
+      )
+    }
+    console.log(error)
+    throw new InternalServerErrorException(
+      `Can't create Pokemon - Check server logs`,
+    )
   }
 }
