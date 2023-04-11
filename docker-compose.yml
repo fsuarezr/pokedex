@@ -16,6 +16,7 @@ services:
     ports:
       - "27017:27017"
     environment:
+      MONGO_INITDB_DATABASE: pokemons
       MONGO_INITDB_ROOT_USERNAME: fslashh
       MONGO_INITDB_ROOT_PASSWORD: HalaMadrid14
     restart: unless-stopped
