@@ -1,10 +1,17 @@
 import { NestFactory } from "@nestjs/core"
-import { AppModule } from "./app.module"
 import { ValidationPipe } from "@nestjs/common"
+import { ConfigService } from "@nestjs/config"
+import { AppModule } from "./app.module"
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.setGlobalPrefix(`api/v2`)
+
+  // Obteniendo variables de entorno
+  const configService = app.get(ConfigService)
+  const port = configService.get(`api.port`)
+  const prefix = configService.get(`api.prefix`)
+
+  app.setGlobalPrefix(prefix)
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -15,6 +22,8 @@ async function bootstrap() {
       },
     }),
   )
-  await app.listen(3000)
+  await app.listen(port)
+  console.log(`App running on port: ${port}`)
 }
+
 bootstrap()
