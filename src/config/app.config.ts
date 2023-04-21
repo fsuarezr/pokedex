@@ -18,7 +18,11 @@ export const EnvConfiguration = () => ({
    */
   services: {
     mongoDB: {
-      mongoConn: process.env.MONGODB_CONN,
+      mongoConn: process.env.MONGODB_CONN || `local`,
+      mongoUser: process.env.MONGO_USER,
+      mongoPassword: process.env.MONGO_PASSWORD,
+      mongoHost: process.env.MONGO_HOST,
+      mongoDatabase: process.env.MONGO_DATABASE,
     },
   },
 })

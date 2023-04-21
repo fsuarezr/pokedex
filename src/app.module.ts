@@ -9,6 +9,10 @@ import { CommonModule } from "./common/common.module"
 import { SeedModule } from "./seed/seed.module"
 import { EnvConfiguration } from "./config/app.config"
 
+import { getMongoDBConnection } from "./common/adapters/mongo.adapter"
+
+console.log(getMongoDBConnection())
+
 @Module({
   imports: [
     ConfigModule.forRoot({
