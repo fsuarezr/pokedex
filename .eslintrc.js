@@ -17,6 +17,11 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    "prettier/prettier": 
+    [ "error",
+      {
+        "endOfLine": "auto"}
+    ],
     "semi": ["error", "never"],
     "quotes": ["error", "backtick"],
     "prefer-template": "error",
