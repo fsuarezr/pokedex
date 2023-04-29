@@ -21,7 +21,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: HalaMadrid14
     restart: unless-stopped
     volumes:
-      - ./data/mongo:/data/db
+      - ../data/mongo:/data/db
     networks:
       - net-services
     logging:
@@ -30,6 +30,21 @@ services:
         max-size: "10m"
         max-file: "5"
         compress: "true"
+  pokedex:
+    depends_on: 
+      - mongodb
+    build: ../POKEDEX/.
+    container_name: pokedex-service
+    image: pokedex/pokedex-service
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ../POKEDEX:/usr/src/app
+      - //usr/src/app/node_modules
+      - //usr/src/app/.git
+    networks:
+      - net-services
 
 # Docker Networks
 networks:
