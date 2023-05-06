@@ -1,16 +1,5 @@
 version: "3.7"
 services:
-  postgres:
-    image: postgres:14
-    platform: linux/arm64
-    restart: unless-stopped
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=fslashh
-      - POSTGRES_PASSWORD=HalaMadrid14
-    networks:
-      - net-services
   mongodb:
     image: mongo
     ports:
